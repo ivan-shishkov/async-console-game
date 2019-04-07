@@ -7,26 +7,40 @@ TIC_TIMEOUT = 0.1
 
 
 async def blink(canvas, row, column, symbol='*'):
+    current_frame = random.randint(1, 4)
+
     while True:
-        canvas.addstr(row, column, symbol, curses.A_DIM)
+        if current_frame == 1:
+            canvas.addstr(row, column, symbol, curses.A_DIM)
 
-        for _ in range(20):
-            await asyncio.sleep(0)
+            for _ in range(20):
+                await asyncio.sleep(0)
 
-        canvas.addstr(row, column, symbol)
+            current_frame = 2
 
-        for _ in range(3):
-            await asyncio.sleep(0)
+        if current_frame == 2:
+            canvas.addstr(row, column, symbol)
 
-        canvas.addstr(row, column, symbol, curses.A_BOLD)
+            for _ in range(3):
+                await asyncio.sleep(0)
 
-        for _ in range(5):
-            await asyncio.sleep(0)
+            current_frame = 3
 
-        canvas.addstr(row, column, symbol)
+        if current_frame == 3:
+            canvas.addstr(row, column, symbol, curses.A_BOLD)
 
-        for _ in range(3):
-            await asyncio.sleep(0)
+            for _ in range(5):
+                await asyncio.sleep(0)
+
+            current_frame = 4
+
+        if current_frame == 4:
+            canvas.addstr(row, column, symbol)
+
+            for _ in range(3):
+                await asyncio.sleep(0)
+
+            current_frame = 1
 
 
 def get_unique_numbers_pairs(first_number_range, second_number_range, count):
@@ -62,7 +76,7 @@ def main(canvas):
     stars_coordinates = get_unique_numbers_pairs(
         first_number_range=(1, canvas_height - 2),
         second_number_range=(1, canvas_width - 2),
-        count=100,
+        count=300,
     )
 
     coroutines = [
