@@ -2,6 +2,7 @@ import time
 import curses
 import asyncio
 import random
+import os.path
 
 TIC_TIMEOUT = 0.1
 
@@ -9,6 +10,13 @@ TIC_TIMEOUT = 0.1
 def load_text_data(filepath):
     with open(filepath, 'r') as file:
         return file.read()
+
+
+def get_animation_frames(filenames, path='frames'):
+    return [
+        load_text_data(os.path.join(path, filename))
+        for filename in filenames
+    ]
 
 
 async def animate_gun_shot(
