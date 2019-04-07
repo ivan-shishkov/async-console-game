@@ -133,7 +133,7 @@ def main(canvas):
     stars_coordinates = get_unique_numbers_pairs(
         first_number_range=(1, canvas_height - 2),
         second_number_range=(1, canvas_width - 2),
-        count=300,
+        count=100,
     )
 
     coroutines = [
