@@ -151,6 +151,21 @@ def main(canvas):
 
     coroutines.append(animate_gun_shot(canvas, center_row, center_column))
 
+    spaceship_animation_frames = get_animation_frames(
+        filenames=[
+            'spaceship_frame_1.txt',
+            'spaceship_frame_2.txt',
+        ],
+    )
+    coroutines.append(
+        animate_spaceship(
+            canvas,
+            center_row,
+            center_column - 2,
+            spaceship_animation_frames,
+        ),
+    )
+
     while True:
         for coroutine in coroutines:
             try:
