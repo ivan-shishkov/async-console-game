@@ -29,8 +29,11 @@ async def blink(canvas, row, column, symbol='*'):
             await asyncio.sleep(0)
 
 
-def get_coordinates(row_range, column_range, count):
-    coordinates = set()
+def get_unique_numbers_pairs(first_number_range, second_number_range, count):
+    numbers_pairs = set()
+
+    first_number_min, first_number_max = first_number_range
+    second_number_min, second_number_max = second_number_range
 
     min_row, max_row = row_range
     min_column, max_column = column_range
@@ -39,11 +42,14 @@ def get_coordinates(row_range, column_range, count):
         row = random.randint(min_row, max_row)
         column = random.randint(min_column, max_column)
 
-        if (row, column) not in coordinates:
-            coordinates.add((row, column))
+    while len(numbers_pairs) < count:
+        first_number = random.randint(first_number_min, first_number_max)
+        second_number = random.randint(second_number_min, second_number_max)
 
-    return list(coordinates)
+        if (first_number, second_number) not in numbers_pairs:
+            numbers_pairs.add((first_number, second_number))
 
+    return list(numbers_pairs)
 
 
 def main(canvas):
@@ -53,9 +59,9 @@ def main(canvas):
 
     canvas_height, canvas_width = canvas.getmaxyx()
 
-    stars_coordinates = get_coordinates(
-        row_range=(1, canvas_height - 2),
-        column_range=(1, canvas_width - 2),
+    stars_coordinates = get_unique_numbers_pairs(
+        first_number_range=(1, canvas_height - 2),
+        second_number_range=(1, canvas_width - 2),
         count=100,
     )
 
