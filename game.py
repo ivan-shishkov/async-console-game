@@ -4,7 +4,7 @@ import asyncio
 import random
 import os.path
 
-from curses_tools import draw_frame
+from curses_tools import draw_frame, read_controls
 
 TIC_TIMEOUT = 0.1
 
@@ -89,14 +89,20 @@ async def animate_blinking_star(canvas, row, column, symbol='*'):
             current_frame = 1
 
 
-async def animate_spaceship(canvas, row, column, frames, frame_delay=2):
+async def animate_spaceship(canvas, start_row, start_column, frames):
+    canvas.nodelay(True)
+
+    row, column = start_row, start_column
+
     while True:
         for frame in frames:
+            rows_direction, columns_direction, _ = read_controls(canvas)
+
+            row += rows_direction
+            column += columns_direction
+
             draw_frame(canvas, row, column, frame)
-
-            for _ in range(frame_delay):
-                await asyncio.sleep(0)
-
+            await asyncio.sleep(0)
             draw_frame(canvas, row, column, frame, negative=True)
 
 
