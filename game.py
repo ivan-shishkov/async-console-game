@@ -6,6 +6,11 @@ import random
 TIC_TIMEOUT = 0.1
 
 
+def load_text_data(filepath):
+    with open(filepath, 'r') as file:
+        return file.read()
+
+
 async def animate_gun_shot(
         canvas, start_row, start_column, rows_speed=-0.3, columns_speed=0):
     """Display animation of gun shot. Direction and speed can be specified."""
