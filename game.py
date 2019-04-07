@@ -167,7 +167,7 @@ def main(canvas):
     )
 
     while True:
-        for coroutine in coroutines:
+        for coroutine in coroutines[:]:
             try:
                 coroutine.send(None)
             except StopIteration:
