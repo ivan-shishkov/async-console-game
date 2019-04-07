@@ -35,12 +35,12 @@ def get_unique_numbers_pairs(first_number_range, second_number_range, count):
     first_number_min, first_number_max = first_number_range
     second_number_min, second_number_max = second_number_range
 
-    min_row, max_row = row_range
-    min_column, max_column = column_range
+    max_pairs_count = (
+            (first_number_max - first_number_min + 1) *
+            (second_number_max - second_number_min + 1)
+    )
 
-    while len(coordinates) < count:
-        row = random.randint(min_row, max_row)
-        column = random.randint(min_column, max_column)
+    count = max_pairs_count if count > max_pairs_count else count
 
     while len(numbers_pairs) < count:
         first_number = random.randint(first_number_min, first_number_max)
