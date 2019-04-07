@@ -6,7 +6,7 @@ import random
 TIC_TIMEOUT = 0.1
 
 
-async def fire(
+async def animate_gun_shot(
         canvas, start_row, start_column, rows_speed=-0.3, columns_speed=0):
     """Display animation of gun shot. Direction and speed can be specified."""
 
@@ -37,7 +37,7 @@ async def fire(
         column += columns_speed
 
 
-async def blink(canvas, row, column, symbol='*'):
+async def animate_blinking_star(canvas, row, column, symbol='*'):
     current_frame = random.randint(1, 4)
 
     while True:
@@ -111,14 +111,19 @@ def main(canvas):
     )
 
     coroutines = [
-        blink(canvas, row, column, symbol=random.choice('*+.:'))
+        animate_blinking_star(
+            canvas=canvas,
+            row=row,
+            column=column,
+            symbol=random.choice('*+.:'),
+        )
         for row, column in stars_coordinates
     ]
 
     center_row = (canvas_height - 1) // 2
     center_column = (canvas_width - 1) // 2
 
-    coroutines.append(fire(canvas, center_row, center_column))
+    coroutines.append(animate_gun_shot(canvas, center_row, center_column))
 
     while True:
         for coroutine in coroutines:
