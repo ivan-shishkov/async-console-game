@@ -3,6 +3,8 @@ import curses
 import asyncio
 import random
 
+from fire_animation import fire
+
 TIC_TIMEOUT = 0.1
 
 
@@ -84,9 +86,17 @@ def main(canvas):
         for row, column in stars_coordinates
     ]
 
+    center_row = (canvas_height - 1) // 2
+    center_column = (canvas_width - 1) // 2
+
+    coroutines.append(fire(canvas, center_row, center_column))
+
     while True:
         for coroutine in coroutines:
-            coroutine.send(None)
+            try:
+                coroutine.send(None)
+            except StopIteration:
+                coroutines.remove(coroutine)
         canvas.refresh()
         time.sleep(TIC_TIMEOUT)
 
