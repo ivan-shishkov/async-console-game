@@ -45,7 +45,8 @@ def get_coordinates(row_range, column_range, count):
     return list(coordinates)
 
 
-def draw(canvas):
+
+def main(canvas):
     curses.curs_set(False)
 
     canvas.border()
@@ -72,4 +73,4 @@ def draw(canvas):
 
 if __name__ == '__main__':
     curses.update_lines_cols()
-    curses.wrapper(draw)
+    curses.wrapper(main)
