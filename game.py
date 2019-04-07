@@ -4,6 +4,8 @@ import asyncio
 import random
 import os.path
 
+from curses_tools import draw_frame
+
 TIC_TIMEOUT = 0.1
 
 
@@ -85,6 +87,17 @@ async def animate_blinking_star(canvas, row, column, symbol='*'):
                 await asyncio.sleep(0)
 
             current_frame = 1
+
+
+async def animate_spaceship(canvas, row, column, frames, frame_delay=2):
+    while True:
+        for frame in frames:
+            draw_frame(canvas, row, column, frame)
+
+            for _ in range(frame_delay):
+                await asyncio.sleep(0)
+
+            draw_frame(canvas, row, column, frame, negative=True)
 
 
 def get_unique_numbers_pairs(first_number_range, second_number_range, count):
