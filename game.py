@@ -175,7 +175,7 @@ def main(canvas):
     coroutines.append(
         animate_spaceship(
             canvas,
-            center_row,
+            center_row + 1,
             center_column - 2,
             spaceship_animation_frames,
         ),
