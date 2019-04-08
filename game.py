@@ -1,10 +1,10 @@
 import time
 import curses
-import asyncio
 import random
-import os.path
 
-from curses_tools import draw_frame, read_controls, get_frame_size
+from animations import animate_spaceship, animate_blinking_star, \
+    animate_gun_shot
+from utils import get_unique_random_numbers_pairs, get_animation_frames
 
 TIC_TIMEOUT = 0.1
 
