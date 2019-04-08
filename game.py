@@ -123,8 +123,10 @@ def get_unique_numbers_pairs(first_number_range, second_number_range, count):
         first_number = random.randint(first_number_min, first_number_max)
         second_number = random.randint(second_number_min, second_number_max)
 
-        if (first_number, second_number) not in numbers_pairs:
-            numbers_pairs.add((first_number, second_number))
+        numbers_pair = (first_number, second_number)
+
+        if numbers_pair not in numbers_pairs:
+            numbers_pairs.add(numbers_pair)
 
     return list(numbers_pairs)
 
