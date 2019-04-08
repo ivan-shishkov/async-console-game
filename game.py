@@ -106,7 +106,8 @@ async def animate_spaceship(canvas, start_row, start_column, frames):
             draw_frame(canvas, row, column, frame, negative=True)
 
 
-def get_unique_numbers_pairs(first_number_range, second_number_range, count):
+def get_unique_random_numbers_pairs(
+        first_number_range, second_number_range, count):
     numbers_pairs = set()
 
     first_number_min, first_number_max = first_number_range
@@ -138,7 +139,7 @@ def main(canvas):
 
     canvas_height, canvas_width = canvas.getmaxyx()
 
-    stars_coordinates = get_unique_numbers_pairs(
+    stars_coordinates = get_unique_random_numbers_pairs(
         first_number_range=(1, canvas_height - 2),
         second_number_range=(1, canvas_width - 2),
         count=100,
