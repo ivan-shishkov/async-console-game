@@ -89,19 +89,21 @@ async def animate_blinking_star(canvas, row, column, symbol='*'):
             current_frame = 1
 
 
-async def animate_spaceship(canvas, start_row, start_column, frames, speed=1):
+async def animate_spaceship(
+        canvas, start_row, start_column, frames, movement_speed=1):
     canvas.nodelay(True)
 
     row, column = start_row, start_column
+
+    canvas_height, canvas_width = canvas.getmaxyx()
 
     while True:
         for frame in frames:
             rows_direction, columns_direction, _ = read_controls(canvas)
 
-            row += rows_direction * speed
-            column += columns_direction * speed
+            row += rows_direction * movement_speed
+            column += columns_direction * movement_speed
 
-            canvas_height, canvas_width = canvas.getmaxyx()
             frame_height, frame_width = get_frame_size(frame)
 
             row = min(canvas_height - frame_height - 1, max(1, row))
