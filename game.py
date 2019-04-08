@@ -29,7 +29,7 @@ def get_animated_stars_coroutines(canvas, stars_count, stars_symbols='*+.:'):
 
 
 def get_animated_spaceship_coroutine(canvas, start_row, start_column):
-    spaceship_animation_frames = get_animation_frames(
+    animation_frames = get_animation_frames(
         filenames=[
             'spaceship_frame_1.txt',
             'spaceship_frame_2.txt',
@@ -39,7 +39,7 @@ def get_animated_spaceship_coroutine(canvas, start_row, start_column):
         canvas=canvas,
         start_row=start_row,
         start_column=start_column,
-        frames=spaceship_animation_frames,
+        frames=animation_frames,
     )
 
 
