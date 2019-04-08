@@ -159,7 +159,7 @@ def get_blinking_stars_coroutines(canvas, stars_count, stars_symbols='*+.:'):
     ]
 
 
-def get_spaceship_coroutine(canvas, start_row, start_column):
+def get_animated_spaceship_coroutine(canvas, start_row, start_column):
     spaceship_animation_frames = get_animation_frames(
         filenames=[
             'spaceship_frame_1.txt',
@@ -200,7 +200,7 @@ def main(canvas):
         ),
     )
     coroutines.append(
-        get_spaceship_coroutine(
+        get_animated_spaceship_coroutine(
             canvas=canvas,
             start_row=center_row + 1,
             start_column=center_column - 2,
