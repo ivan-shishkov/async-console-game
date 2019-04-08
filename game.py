@@ -62,17 +62,17 @@ def main(canvas):
         ),
     )
     coroutines.append(
-        animate_gun_shot(
-            canvas=canvas,
-            start_row=center_row,
-            start_column=center_column,
-        ),
-    )
-    coroutines.append(
         get_animated_spaceship_coroutine(
             canvas=canvas,
             start_row=center_row + 1,
             start_column=center_column - 2,
+        ),
+    )
+    coroutines.append(
+        animate_gun_shot(
+            canvas=canvas,
+            start_row=center_row,
+            start_column=center_column,
         ),
     )
     while True:
