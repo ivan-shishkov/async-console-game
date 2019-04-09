@@ -2,8 +2,9 @@ import time
 import curses
 import random
 
-from animations import animate_spaceship, animate_blinking_star, \
-    animate_gun_shot
+from animations import (
+    animate_spaceship, animate_blinking_star, animate_gun_shot,
+)
 from utils import get_unique_random_numbers_pairs, get_animation_frames
 
 TIC_TIMEOUT = 0.1
