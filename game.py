@@ -47,6 +47,7 @@ def get_animated_spaceship_coroutine(canvas, start_row, start_column):
 def main(canvas):
     curses.curs_set(False)
 
+    canvas.nodelay(True)
     canvas.border()
 
     canvas_height, canvas_width = canvas.getmaxyx()
