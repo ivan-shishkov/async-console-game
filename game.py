@@ -1,13 +1,51 @@
 import time
 import curses
 import random
+import asyncio
 
 from animations import (
     animate_spaceship, animate_blinking_star, animate_gun_shot,
+    animate_flying_garbage,
 )
 from utils import get_unique_random_numbers_pairs, get_animation_frames
 
 TIC_TIMEOUT = 0.1
+
+coroutines = []
+
+
+async def generate_flying_garbage(canvas, garbage_frames):
+    _, canvas_width = canvas.getmaxyx()
+
+    while True:
+        coroutines.append(
+            animate_flying_garbage(
+                canvas=canvas,
+                column=random.randint(1, canvas_width - 1),
+                garbage_frame=random.choice(garbage_frames),
+            )
+        )
+        timeout = random.randint(10, 20)
+
+        for _ in range(timeout):
+            await asyncio.sleep(0)
+
+
+def get_generating_flying_garbage_coroutine(canvas):
+    garbage_frames = get_animation_frames(
+        filenames=[
+            'garbage_duck.txt',
+            'garbage_hubble.txt',
+            'garbage_lamp.txt',
+            'garbage_large.txt',
+            'garbage_small.txt',
+            'garbage_xl.txt',
+        ],
+    )
+    return generate_flying_garbage(
+        canvas=canvas,
+        garbage_frames=garbage_frames,
+    )
 
 
 def get_animated_stars_coroutines(canvas, stars_count, stars_symbols='*+.:'):
@@ -55,8 +93,6 @@ def main(canvas):
     center_row = (canvas_height - 1) // 2
     center_column = (canvas_width - 1) // 2
 
-    coroutines = []
-
     coroutines.extend(
         get_animated_stars_coroutines(
             canvas=canvas,
@@ -75,6 +111,11 @@ def main(canvas):
             canvas=canvas,
             start_row=center_row,
             start_column=center_column,
+        ),
+    )
+    coroutines.append(
+        get_generating_flying_garbage_coroutine(
+            canvas=canvas,
         ),
     )
     while True:
