@@ -5,6 +5,25 @@ import random
 from curses_tools import draw_frame, get_frame_size, read_controls
 
 
+async def animate_flying_garbage(canvas, column, garbage_frame, speed=0.5):
+    """Animate garbage, flying from top to bottom.
+    Сolumn position will stay same, as specified on start.
+    """
+    canvas_height, canvas_width = canvas.getmaxyx()
+
+    frame_height, frame_width = get_frame_size(garbage_frame)
+
+    column = min(canvas_width - frame_width - 1, max(1, column))
+
+    row = 1
+
+    while row < canvas_height - frame_height - 1:
+        draw_frame(canvas, row, column, garbage_frame)
+        await asyncio.sleep(0)
+        draw_frame(canvas, row, column, garbage_frame, negative=True)
+        row += speed
+
+
 async def animate_gun_shot(
         canvas, start_row, start_column, rows_speed=-0.3, columns_speed=0):
     """Display animation of gun shot. Direction and speed can be specified."""
