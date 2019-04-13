@@ -1,11 +1,10 @@
 import time
 import curses
 import random
-import asyncio
 
 from animations import (
     animate_spaceship, animate_blinking_star, animate_gun_shot,
-    animate_flying_garbage,
+    animate_flying_garbage, sleep
 )
 from utils import get_unique_random_numbers_pairs, get_animation_frames
 
@@ -25,10 +24,7 @@ async def generate_flying_garbage(canvas, garbage_frames):
                 garbage_frame=random.choice(garbage_frames),
             )
         )
-        timeout = random.randint(10, 20)
-
-        for _ in range(timeout):
-            await asyncio.sleep(0)
+        await sleep(random.randint(10, 20))
 
 
 def get_generating_flying_garbage_coroutine(canvas):

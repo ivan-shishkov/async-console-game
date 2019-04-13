@@ -5,6 +5,11 @@ import random
 from curses_tools import draw_frame, get_frame_size, read_controls
 
 
+async def sleep(tics=1):
+    for _ in range(tics):
+        await asyncio.sleep(0)
+
+
 async def animate_flying_garbage(canvas, column, garbage_frame, speed=0.5):
     """Animate garbage, flying from top to bottom.
     Сolumn position will stay same, as specified on start.
@@ -61,34 +66,22 @@ async def animate_blinking_star(canvas, row, column, symbol='*'):
     while True:
         if current_frame == 1:
             canvas.addstr(row, column, symbol, curses.A_DIM)
-
-            for _ in range(20):
-                await asyncio.sleep(0)
-
+            await sleep(20)
             current_frame = 2
 
         if current_frame == 2:
             canvas.addstr(row, column, symbol)
-
-            for _ in range(3):
-                await asyncio.sleep(0)
-
+            await sleep(3)
             current_frame = 3
 
         if current_frame == 3:
             canvas.addstr(row, column, symbol, curses.A_BOLD)
-
-            for _ in range(5):
-                await asyncio.sleep(0)
-
+            await sleep(5)
             current_frame = 4
 
         if current_frame == 4:
             canvas.addstr(row, column, symbol)
-
-            for _ in range(3):
-                await asyncio.sleep(0)
-
+            await sleep(3)
             current_frame = 1
 
 
