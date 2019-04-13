@@ -3,6 +3,7 @@ import curses
 import random
 
 from curses_tools import draw_frame, get_frame_size, read_controls
+from physics import update_speed
 
 
 async def sleep(tics=1):
@@ -85,9 +86,10 @@ async def animate_blinking_star(canvas, row, column, symbol='*'):
             current_frame = 1
 
 
-async def animate_spaceship(
-        canvas, start_row, start_column, frames, movement_speed=1):
+async def animate_spaceship(canvas, start_row, start_column, frames):
     row, column = start_row, start_column
+
+    row_speed = column_speed = 0
 
     canvas_height, canvas_width = canvas.getmaxyx()
 
@@ -95,8 +97,14 @@ async def animate_spaceship(
         for frame in frames:
             rows_direction, columns_direction, _ = read_controls(canvas)
 
-            row += rows_direction * movement_speed
-            column += columns_direction * movement_speed
+            row_speed, column_speed = update_speed(
+                row_speed=row_speed,
+                column_speed=column_speed,
+                rows_direction=rows_direction,
+                columns_direction=columns_direction,
+            )
+            row += row_speed
+            column += column_speed
 
             frame_height, frame_width = get_frame_size(frame)
 
