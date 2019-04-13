@@ -14,6 +14,12 @@ def get_animation_frames(filenames, path='frames'):
     ]
 
 
+def limit(value, min_value, max_value):
+    """Limit value by min_value and max_value."""
+
+    return min(max_value, max(min_value, value))
+
+
 def get_unique_random_numbers_pairs(
         first_number_range, second_number_range, count):
     numbers_pairs = set()

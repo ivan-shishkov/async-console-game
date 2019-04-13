@@ -1,10 +1,6 @@
 import math
 
-
-def _limit(value, min_value, max_value):
-    """Limit value by min_value and max_value."""
-
-    return min(max_value, max(min_value, value))
+from utils import limit
 
 
 def _apply_acceleration(speed, speed_limit, forward=True):
@@ -20,7 +16,7 @@ def _apply_acceleration(speed, speed_limit, forward=True):
 
     result_speed = speed + delta if forward else speed - delta
 
-    result_speed = _limit(
+    result_speed = limit(
         value=result_speed,
         min_value=-speed_limit,
         max_value=speed_limit,
