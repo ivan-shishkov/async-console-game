@@ -29,7 +29,7 @@ async def animate_flying_garbage(canvas, column, garbage_frame, speed=0.5):
 
     while row < canvas_height - frame_height - 1:
         draw_frame(canvas, row, column, garbage_frame)
-        await asyncio.sleep(0)
+        await sleep()
         draw_frame(canvas, row, column, garbage_frame, negative=True)
         row += speed
 
@@ -41,10 +41,10 @@ async def animate_gun_shot(
     row, column = start_row, start_column
 
     canvas.addstr(round(row), round(column), '*')
-    await asyncio.sleep(0)
+    await sleep()
 
     canvas.addstr(round(row), round(column), 'O')
-    await asyncio.sleep(0)
+    await sleep()
     canvas.addstr(round(row), round(column), ' ')
 
     row += rows_speed
@@ -59,7 +59,7 @@ async def animate_gun_shot(
 
     while 1 < row < max_row and 0 < column < max_column:
         canvas.addstr(round(row), round(column), symbol)
-        await asyncio.sleep(0)
+        await sleep()
         canvas.addstr(round(row), round(column), ' ')
         row += rows_speed
         column += columns_speed
@@ -90,7 +90,7 @@ async def animate_blinking_star(canvas, row, column, symbol='*'):
             current_frame = 1
 
 
-async def animate_spaceship(canvas, start_row, start_column, frames):
+async def run_spaceship(canvas, start_row, start_column):
     row, column = start_row, start_column
 
     row_speed = column_speed = 0
@@ -98,31 +98,41 @@ async def animate_spaceship(canvas, start_row, start_column, frames):
     canvas_height, canvas_width = canvas.getmaxyx()
 
     while True:
+        current_frame = spaceship_frame
+
+        rows_direction, columns_direction, _ = read_controls(canvas)
+
+        row_speed, column_speed = update_speed(
+            row_speed=row_speed,
+            column_speed=column_speed,
+            rows_direction=rows_direction,
+            columns_direction=columns_direction,
+        )
+        row += row_speed
+        column += column_speed
+
+        frame_height, frame_width = get_frame_size(current_frame)
+
+        row = limit(
+            value=row,
+            min_value=1,
+            max_value=canvas_height - frame_height - 1,
+        )
+        column = limit(
+            value=column,
+            min_value=1,
+            max_value=canvas_width - frame_width - 1,
+        )
+
+        draw_frame(canvas, row, column, current_frame)
+        await sleep()
+        draw_frame(canvas, row, column, current_frame, negative=True)
+
+
+async def animate_spaceship(frames):
+    global spaceship_frame
+
+    while True:
         for frame in frames:
-            rows_direction, columns_direction, _ = read_controls(canvas)
-
-            row_speed, column_speed = update_speed(
-                row_speed=row_speed,
-                column_speed=column_speed,
-                rows_direction=rows_direction,
-                columns_direction=columns_direction,
-            )
-            row += row_speed
-            column += column_speed
-
-            frame_height, frame_width = get_frame_size(frame)
-
-            row = limit(
-                value=row,
-                min_value=1,
-                max_value=canvas_height - frame_height - 1,
-            )
-            column = limit(
-                value=column,
-                min_value=1,
-                max_value=canvas_width - frame_width - 1,
-            )
-
-            draw_frame(canvas, row, column, frame)
-            await asyncio.sleep(0)
-            draw_frame(canvas, row, column, frame, negative=True)
+            spaceship_frame = frame
+            await sleep()

@@ -4,7 +4,7 @@ import random
 
 from animations import (
     animate_spaceship, animate_blinking_star, animate_gun_shot,
-    animate_flying_garbage, sleep
+    animate_flying_garbage, sleep, run_spaceship,
 )
 from utils import get_unique_random_numbers_pairs, get_animation_frames
 
@@ -63,7 +63,7 @@ def get_animated_stars_coroutines(canvas, stars_count, stars_symbols='*+.:'):
     ]
 
 
-def get_animated_spaceship_coroutine(canvas, start_row, start_column):
+def get_animated_spaceship_coroutine():
     animation_frames = get_animation_frames(
         filenames=[
             'spaceship_frame_1.txt',
@@ -71,9 +71,6 @@ def get_animated_spaceship_coroutine(canvas, start_row, start_column):
         ],
     )
     return animate_spaceship(
-        canvas=canvas,
-        start_row=start_row,
-        start_column=start_column,
         frames=animation_frames,
     )
 
@@ -96,7 +93,10 @@ def main(canvas):
         ),
     )
     coroutines.append(
-        get_animated_spaceship_coroutine(
+        get_animated_spaceship_coroutine(),
+    )
+    coroutines.append(
+        run_spaceship(
             canvas=canvas,
             start_row=center_row + 1,
             start_column=center_column - 2,
