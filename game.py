@@ -1,16 +1,157 @@
 import time
 import curses
 import random
+import asyncio
 
-from animations import (
-    animate_spaceship, animate_blinking_star, animate_gun_shot,
-    animate_flying_garbage, sleep, run_spaceship,
-)
-from utils import get_unique_random_numbers_pairs, get_animation_frames
+from utils import get_unique_random_numbers_pairs, get_animation_frames, limit
+from curses_tools import draw_frame, get_frame_size, read_controls
+from physics import update_speed
 
 TIC_TIMEOUT = 0.1
 
 coroutines = []
+
+
+async def sleep(tics=1):
+    for _ in range(tics):
+        await asyncio.sleep(0)
+
+
+async def animate_flying_garbage(canvas, column, garbage_frame, speed=0.5):
+    """Animate garbage, flying from top to bottom.
+    Сolumn position will stay same, as specified on start.
+    """
+    canvas_height, canvas_width = canvas.getmaxyx()
+
+    frame_height, frame_width = get_frame_size(garbage_frame)
+
+    column = limit(
+        value=column,
+        min_value=1,
+        max_value=canvas_width - frame_width - 1,
+    )
+    row = 1
+
+    while row < canvas_height - frame_height - 1:
+        draw_frame(canvas, row, column, garbage_frame)
+        await sleep()
+        draw_frame(canvas, row, column, garbage_frame, negative=True)
+        row += speed
+
+
+async def animate_gun_shot(
+        canvas, start_row, start_column, rows_speed=-0.3, columns_speed=0):
+    """Display animation of gun shot. Direction and speed can be specified."""
+
+    row, column = start_row, start_column
+
+    canvas.addstr(round(row), round(column), '*')
+    await sleep()
+
+    canvas.addstr(round(row), round(column), 'O')
+    await sleep()
+    canvas.addstr(round(row), round(column), ' ')
+
+    row += rows_speed
+    column += columns_speed
+
+    symbol = '-' if columns_speed else '|'
+
+    rows, columns = canvas.getmaxyx()
+    max_row, max_column = rows - 1, columns - 1
+
+    curses.beep()
+
+    while 1 < row < max_row and 0 < column < max_column:
+        canvas.addstr(round(row), round(column), symbol)
+        await sleep()
+        canvas.addstr(round(row), round(column), ' ')
+        row += rows_speed
+        column += columns_speed
+
+
+async def animate_blinking_star(canvas, row, column, symbol='*'):
+    current_frame = random.randint(1, 4)
+
+    while True:
+        if current_frame == 1:
+            canvas.addstr(row, column, symbol, curses.A_DIM)
+            await sleep(20)
+            current_frame = 2
+
+        if current_frame == 2:
+            canvas.addstr(row, column, symbol)
+            await sleep(3)
+            current_frame = 3
+
+        if current_frame == 3:
+            canvas.addstr(row, column, symbol, curses.A_BOLD)
+            await sleep(5)
+            current_frame = 4
+
+        if current_frame == 4:
+            canvas.addstr(row, column, symbol)
+            await sleep(3)
+            current_frame = 1
+
+
+async def run_spaceship(canvas, start_row, start_column):
+    row, column = start_row, start_column
+
+    row_speed = column_speed = 0
+
+    canvas_height, canvas_width = canvas.getmaxyx()
+
+    while True:
+        current_frame = spaceship_frame
+
+        rows_direction, columns_direction, space_pressed = read_controls(
+            canvas=canvas,
+        )
+        row_speed, column_speed = update_speed(
+            row_speed=row_speed,
+            column_speed=column_speed,
+            rows_direction=rows_direction,
+            columns_direction=columns_direction,
+        )
+        row += row_speed
+        column += column_speed
+
+        frame_height, frame_width = get_frame_size(current_frame)
+
+        row = limit(
+            value=row,
+            min_value=1,
+            max_value=canvas_height - frame_height - 1,
+        )
+        column = limit(
+            value=column,
+            min_value=1,
+            max_value=canvas_width - frame_width - 1,
+        )
+
+        draw_frame(canvas, row, column, current_frame)
+
+        if space_pressed and row > 1:
+            coroutines.append(
+                animate_gun_shot(
+                    canvas=canvas,
+                    start_row=row - 1,
+                    start_column=column + 2,
+                )
+            )
+
+        await sleep()
+        draw_frame(canvas, row, column, current_frame, negative=True)
+
+
+async def animate_spaceship(frames):
+    global spaceship_frame
+
+    while True:
+        for frame in frames:
+            spaceship_frame = frame
+            await sleep()
 
 
 async def generate_flying_garbage(canvas, garbage_frames):
@@ -100,13 +241,6 @@ def main(canvas):
             canvas=canvas,
             start_row=center_row + 1,
             start_column=center_column - 2,
-        ),
-    )
-    coroutines.append(
-        animate_gun_shot(
-            canvas=canvas,
-            start_row=center_row,
-            start_column=center_column,
         ),
     )
     coroutines.append(
