@@ -6,10 +6,13 @@ import asyncio
 from utils import get_unique_random_numbers_pairs, get_animation_frames, limit
 from curses_tools import draw_frame, get_frame_size, read_controls
 from physics import update_speed
+from obstacles import Obstacle, show_obstacles
 
 TIC_TIMEOUT = 0.1
 
 coroutines = []
+
+obstacles = []
 
 
 async def sleep(tics=1):
@@ -33,9 +36,20 @@ async def animate_flying_garbage(canvas, column, garbage_frame, speed=0.5):
     row = 1
 
     while row < canvas_height - frame_height - 1:
+        obstacle = Obstacle(
+            row=row,
+            column=column,
+            rows_size=frame_height,
+            columns_size=frame_width,
+        )
+        obstacles.append(obstacle)
+
         draw_frame(canvas, row, column, garbage_frame)
         await sleep()
         draw_frame(canvas, row, column, garbage_frame, negative=True)
+
+        obstacles.remove(obstacle)
+
         row += speed
 
 
@@ -247,6 +261,12 @@ def main(canvas):
         get_generating_flying_garbage_coroutine(
             canvas=canvas,
         ),
+    )
+    coroutines.append(
+        show_obstacles(
+            canvas=canvas,
+            obstacles=obstacles,
+        )
     )
     while True:
         for coroutine in coroutines[:]:
