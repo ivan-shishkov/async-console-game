@@ -13,6 +13,7 @@ TIC_TIMEOUT = 0.1
 coroutines = []
 
 obstacles = []
+obstacles_in_last_collisions = []
 
 
 async def sleep(tics=1):
@@ -50,6 +51,10 @@ async def animate_flying_garbage(canvas, column, garbage_frame, speed=0.5):
 
         obstacles.remove(obstacle)
 
+        if obstacle in obstacles_in_last_collisions:
+            obstacles_in_last_collisions.remove(obstacle)
+            return
+
         row += speed
 
 
@@ -80,6 +85,7 @@ async def animate_gun_shot(
         for obstacle in obstacles:
             if obstacle.has_collision(
                     obj_corner_row=row, obj_corner_column=column):
+                obstacles_in_last_collisions.append(obstacle)
                 return
         canvas.addstr(round(row), round(column), symbol)
         await sleep()
