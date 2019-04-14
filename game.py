@@ -174,6 +174,14 @@ async def run_spaceship(canvas, start_row, start_column):
         await sleep()
         draw_frame(canvas, row, column, current_frame, negative=True)
 
+        for obstacle in obstacles:
+            if obstacle.has_collision(
+                    obj_corner_row=row, obj_corner_column=column):
+                coroutines.append(
+                    show_gameover(canvas=canvas),
+                )
+                return
+
 
 async def animate_spaceship(frames):
     global spaceship_frame
@@ -244,6 +252,32 @@ def get_animated_spaceship_coroutine():
     return animate_spaceship(
         frames=animation_frames,
     )
+
+
+async def show_gameover(canvas):
+    text = """\
+   _____                         ____                 
+  / ____|                       / __ \                
+ | |  __  __ _ _ __ ___   ___  | |  | |_   _____ _ __ 
+ | | |_ |/ _` | '_ ` _ \ / _ \ | |  | \ \ / / _ \ '__|
+ | |__| | (_| | | | | | |  __/ | |__| |\ V /  __/ |   
+  \_____|\__,_|_| |_| |_|\___|  \____/  \_/ \___|_|   
+"""
+    canvas_height, canvas_width = canvas.getmaxyx()
+
+    center_row = (canvas_height - 1) // 2
+    center_column = (canvas_width - 1) // 2
+
+    frame_height, frame_width = get_frame_size(text)
+
+    while True:
+        draw_frame(
+            canvas=canvas,
+            start_row=center_row - frame_height // 2,
+            start_column=center_column - frame_width // 2,
+            text=text,
+        )
+        await sleep()
 
 
 def main(canvas):
