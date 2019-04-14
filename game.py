@@ -77,6 +77,10 @@ async def animate_gun_shot(
     curses.beep()
 
     while 1 < row < max_row and 0 < column < max_column:
+        for obstacle in obstacles:
+            if obstacle.has_collision(
+                    obj_corner_row=row, obj_corner_column=column):
+                return
         canvas.addstr(round(row), round(column), symbol)
         await sleep()
         canvas.addstr(round(row), round(column), ' ')
