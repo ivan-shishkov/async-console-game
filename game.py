@@ -11,6 +11,19 @@ from explosion import explode
 
 TIC_TIMEOUT = 0.1
 
+PHRASES = {
+    1957: 'First Sputnik',
+    1961: 'Gagarin flew!',
+    1969: 'Armstrong got on the moon!',
+    1971: 'First orbital space station Salute-1',
+    1981: 'Flight of the Shuttle Columbia',
+    1998: 'ISS start building',
+    2011: 'Messenger launch to Mercury',
+    2020: 'Take the plasma gun! Shoot the garbage!',
+}
+
+year = 1957
+
 coroutines = []
 
 obstacles = []
@@ -20,6 +33,25 @@ obstacles_in_last_collisions = []
 async def sleep(tics=1):
     for _ in range(tics):
         await asyncio.sleep(0)
+
+
+async def update_year(increment_value=1, update_interval=15):
+    global year
+
+    while True:
+        await sleep(update_interval)
+
+        year += increment_value
+
+
+async def show_year(canvas, update_interval=15):
+    while True:
+        phrase = PHRASES.get(year, '')
+        text = f'{year} - {phrase}' if phrase else f'{year}'
+
+        draw_frame(canvas, 1, 1, text)
+        await sleep(update_interval)
+        draw_frame(canvas, 1, 1, text, negative=True)
 
 
 async def animate_flying_garbage(canvas, column, garbage_frame, speed=0.5):
@@ -318,6 +350,8 @@ def main(canvas):
             obstacles=obstacles,
         )
     )
+    coroutines.append(update_year())
+    coroutines.append(show_year(canvas))
     while True:
         for coroutine in coroutines[:]:
             try:
