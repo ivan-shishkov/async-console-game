@@ -231,14 +231,19 @@ async def generate_flying_garbage(canvas, garbage_frames):
     _, canvas_width = canvas.getmaxyx()
 
     while True:
-        coroutines.append(
-            animate_flying_garbage(
-                canvas=canvas,
-                column=random.randint(1, canvas_width - 1),
-                garbage_frame=random.choice(garbage_frames),
+        delay_tics = get_generating_garbage_delay_tics(year)
+
+        if delay_tics:
+            coroutines.append(
+                animate_flying_garbage(
+                    canvas=canvas,
+                    column=random.randint(1, canvas_width - 1),
+                    garbage_frame=random.choice(garbage_frames),
+                )
             )
-        )
-        await sleep(random.randint(10, 20))
+            await sleep(delay_tics)
+        else:
+            await sleep()
 
 
 def get_generating_flying_garbage_coroutine(canvas):
@@ -313,6 +318,23 @@ async def show_gameover(canvas):
             text=text,
         )
         await sleep()
+
+
+def get_generating_garbage_delay_tics(current_year):
+    if current_year < 1961:
+        return None
+    elif current_year < 1969:
+        return 20
+    elif current_year < 1981:
+        return 14
+    elif current_year < 1995:
+        return 10
+    elif current_year < 2010:
+        return 8
+    elif current_year < 2020:
+        return 6
+    else:
+        return 2
 
 
 def main(canvas):
