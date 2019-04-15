@@ -157,7 +157,8 @@ async def animate_blinking_star(canvas, row, column, symbol='*'):
             current_frame = 1
 
 
-async def run_spaceship(canvas, start_row, start_column):
+async def run_spaceship(
+        canvas, start_row, start_column, gun_activation_year=2020):
     row, column = start_row, start_column
 
     row_speed = column_speed = 0
@@ -194,7 +195,7 @@ async def run_spaceship(canvas, start_row, start_column):
 
         draw_frame(canvas, row, column, current_frame)
 
-        if space_pressed and row > 1:
+        if space_pressed and row > 1 and year >= gun_activation_year:
             coroutines.append(
                 animate_gun_shot(
                     canvas=canvas,
