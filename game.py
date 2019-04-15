@@ -26,6 +26,8 @@ year = 1957
 
 coroutines = []
 
+spaceship_frame = None
+
 obstacles = []
 obstacles_in_last_collisions = []
 
