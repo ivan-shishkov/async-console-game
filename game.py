@@ -6,7 +6,7 @@ import asyncio
 from utils import get_unique_random_numbers_pairs, get_animation_frames, limit
 from curses_tools import draw_frame, get_frame_size, read_controls
 from physics import update_speed
-from obstacles import Obstacle, show_obstacles
+from obstacles import Obstacle
 from explosion import explode
 
 TIC_TIMEOUT = 0.1
@@ -369,14 +369,9 @@ def main(canvas):
             canvas=canvas,
         ),
     )
-    coroutines.append(
-        show_obstacles(
-            canvas=canvas,
-            obstacles=obstacles,
-        )
-    )
     coroutines.append(update_year())
     coroutines.append(show_year(canvas))
+
     while True:
         for coroutine in coroutines[:]:
             try:
