@@ -51,9 +51,9 @@ async def show_year(canvas, update_interval=15):
         phrase = PHRASES.get(year, '')
         text = f'{year} - {phrase}' if phrase else f'{year}'
 
-        draw_frame(canvas, 1, 1, text)
+        draw_frame(canvas, 0, 1, text)
         await sleep(update_interval)
-        draw_frame(canvas, 1, 1, text, negative=True)
+        draw_frame(canvas, 0, 1, text, negative=True)
 
 
 async def animate_flying_garbage(canvas, column, garbage_frame, speed=0.5):
