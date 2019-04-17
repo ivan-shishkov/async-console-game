@@ -235,11 +235,15 @@ async def generate_flying_garbage(canvas, garbage_frames):
         delay_tics = get_generating_garbage_delay_tics(year)
 
         if delay_tics:
+            garbage_frame = random.choice(garbage_frames)
+
+            _, frame_width = get_frame_size(garbage_frame)
+
             coroutines.append(
                 animate_flying_garbage(
                     canvas=canvas,
-                    column=random.randint(1, canvas_width - 1),
-                    garbage_frame=random.choice(garbage_frames),
+                    column=random.randint(1, canvas_width - frame_width - 1),
+                    garbage_frame=garbage_frame,
                 )
             )
             await sleep(delay_tics)
