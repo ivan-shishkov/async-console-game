@@ -340,17 +340,23 @@ def get_generating_garbage_delay_tics(current_year):
 def main(canvas):
     curses.curs_set(False)
 
-    canvas.nodelay(True)
-    canvas.border()
-
     canvas_height, canvas_width = canvas.getmaxyx()
 
-    center_row = (canvas_height - 1) // 2
-    center_column = (canvas_width - 1) // 2
+    info_canvas = canvas.derwin(1, canvas_width, 0, 0)
+    game_canvas = canvas.derwin(canvas_height - 1, canvas_width, 1, 0)
+
+    game_canvas.keypad(True)
+    game_canvas.nodelay(True)
+    game_canvas.border()
+
+    game_canvas_height, game_canvas_width = game_canvas.getmaxyx()
+
+    center_row = (game_canvas_height - 1) // 2
+    center_column = (game_canvas_width - 1) // 2
 
     coroutines.extend(
         get_animated_stars_coroutines(
-            canvas=canvas,
+            canvas=game_canvas,
             stars_count=100,
         ),
     )
@@ -359,18 +365,18 @@ def main(canvas):
     )
     coroutines.append(
         run_spaceship(
-            canvas=canvas,
+            canvas=game_canvas,
             start_row=center_row + 1,
             start_column=center_column - 2,
         ),
     )
     coroutines.append(
         get_generating_flying_garbage_coroutine(
-            canvas=canvas,
+            canvas=game_canvas,
         ),
     )
     coroutines.append(update_year())
-    coroutines.append(show_year(canvas))
+    coroutines.append(show_year(canvas=info_canvas))
 
     while True:
         for coroutine in coroutines[:]:
@@ -378,7 +384,8 @@ def main(canvas):
                 coroutine.send(None)
             except StopIteration:
                 coroutines.remove(coroutine)
-        canvas.refresh()
+        game_canvas.refresh()
+        info_canvas.refresh()
         time.sleep(TIC_TIMEOUT)
 
 
