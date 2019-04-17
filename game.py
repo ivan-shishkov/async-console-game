@@ -7,7 +7,7 @@ from utils import get_unique_random_numbers_pairs, get_animation_frames, limit
 from curses_tools import draw_frame, get_frame_size, read_controls
 from physics import update_speed
 from obstacles import Obstacle
-from explosion import explode
+from explosion import animate_explosion
 
 TIC_TIMEOUT = 0.1
 
@@ -88,7 +88,8 @@ async def animate_flying_garbage(canvas, column, garbage_frame, speed=0.5):
 
         if obstacle in obstacles_in_last_collisions:
             obstacles_in_last_collisions.remove(obstacle)
-            await explode(
+
+            await animate_explosion(
                 canvas=canvas,
                 center_row=row + 2 + frame_height // 2,
                 center_column=column + frame_width // 2,
