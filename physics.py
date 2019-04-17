@@ -60,7 +60,7 @@ def update_speed(row_speed, column_speed, rows_direction, columns_direction,
 
     if fading < 0 or fading > 1:
         raise ValueError(
-            f'Wrong columns_direction value {fading}. '
+            f'Wrong fading value {fading}. '
             f'Expects float between 0 and 1.',
         )
 
