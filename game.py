@@ -90,7 +90,7 @@ async def animate_flying_garbage(canvas, column, garbage_frame, speed=0.5):
             obstacles_in_last_collisions.remove(obstacle)
             await explode(
                 canvas=canvas,
-                center_row=row + frame_height // 2,
+                center_row=row + 2 + frame_height // 2,
                 center_column=column + frame_width // 2,
             )
             return
