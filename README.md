@@ -2,6 +2,11 @@
 
 This project is an example of a console game developed using the [asyncio](https://docs.python.org/3/library/asyncio.html) module to draw all animations.
 
+The plot of the game begins in 1957, when there was no garbage in space. 
+Then the garbage appears and its quantity becomes more and more. 
+In 2020, the spaceship appears laser gun, capable of destroying flying garbage. 
+The main task is to prevent a spaceship from colliding with flying garbage.
+
 ## Currently implemented
 
 * Drawing randomly placed blinking stars
