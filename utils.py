@@ -1,5 +1,11 @@
 import random
 import os.path
+import asyncio
+
+
+async def sleep(tics=1):
+    for _ in range(tics):
+        await asyncio.sleep(0)
 
 
 def load_text_data(filepath):

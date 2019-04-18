@@ -1,9 +1,10 @@
 import time
 import curses
 import random
-import asyncio
 
-from utils import get_unique_random_numbers_pairs, get_animation_frames, limit
+from utils import (
+    get_unique_random_numbers_pairs, get_animation_frames, limit, sleep,
+)
 from curses_tools import draw_frame, get_frame_size, read_controls
 from physics import update_speed
 from obstacles import Obstacle
@@ -30,11 +31,6 @@ spaceship_frame = None
 
 obstacles = []
 obstacles_in_last_collisions = []
-
-
-async def sleep(tics=1):
-    for _ in range(tics):
-        await asyncio.sleep(0)
 
 
 async def update_year(increment_value=1, update_interval=15):

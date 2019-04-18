@@ -1,6 +1,7 @@
-import asyncio
 import curses
+
 from curses_tools import draw_frame, get_frame_size
+from utils import sleep
 
 EXPLOSION_FRAMES = [
     """\
@@ -39,6 +40,6 @@ async def animate_explosion(canvas, center_row, center_column):
     for frame in EXPLOSION_FRAMES:
         draw_frame(canvas, corner_row, corner_column, frame)
 
-        await asyncio.sleep(0)
+        await sleep()
         draw_frame(canvas, corner_row, corner_column, frame, negative=True)
-        await asyncio.sleep(0)
+        await sleep()
