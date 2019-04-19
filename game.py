@@ -45,7 +45,7 @@ async def update_year(increment_value=1, update_interval=15):
 async def show_year(canvas, update_interval=15):
     while True:
         phrase = PHRASES.get(year, '')
-        text = f'{year} - {phrase}' if phrase else f'{year}'
+        text = f'Year: {year} - {phrase}' if phrase else f'Year: {year}'
 
         draw_frame(canvas, 0, 1, text)
         await sleep(update_interval)
